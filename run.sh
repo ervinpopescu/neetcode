@@ -1,5 +1,5 @@
 #!/bin/bash
-cargo -q clippy
+cargo clippy
 echo
 RUST_BACKTRACE=1 cargo build -q --release
 ./target/release/neetcode

@@ -1,3 +1,4 @@
+pub mod eval_rpn;
 pub mod generic_solution;
 pub mod group_anagrams;
 pub mod is_palindrome;
@@ -11,4 +12,3 @@ pub mod three_sum;
 pub mod top_k_frequent;
 pub mod trap;
 pub mod two_sum_ii;
-pub mod eval_rpn;

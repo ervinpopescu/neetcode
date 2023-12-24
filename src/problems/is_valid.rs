@@ -1,4 +1,4 @@
-use std::{path::PathBuf, str::FromStr, collections::HashMap};
+use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
 use super::generic_solution::{GenericSolution, Solve};
 
