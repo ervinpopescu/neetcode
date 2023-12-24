@@ -1,3 +1,14 @@
+pub mod generic_solution;
 pub mod group_anagrams;
-pub mod top_k_frequent;
+pub mod is_palindrome;
+pub mod is_valid;
+pub mod is_valid_sudoku;
+pub mod longest_consecutive;
+pub mod max_area;
+pub mod min_stack;
 pub mod product_except_self;
+pub mod three_sum;
+pub mod top_k_frequent;
+pub mod trap;
+pub mod two_sum_ii;
+pub mod eval_rpn;

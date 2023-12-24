@@ -1,17 +1,25 @@
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(dead_code)]
+use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
-use std::collections::HashMap;
+use super::generic_solution::{GenericSolution, Solve};
 
 pub struct Solution {
+    pub generic: GenericSolution<Vec<String>, Vec<Vec<String>>>,
     pub problem: String,
 }
 
-impl Solution {
-    pub fn solve(strs: Vec<String>) -> Vec<Vec<String>> {
+impl Solve<Vec<String>, Vec<Vec<String>>> for Solution {
+    fn new() -> Self {
+        Self {
+            problem: "group_anagrams".to_string(),
+            generic: GenericSolution {
+                input: Vec::new(),
+                output: Vec::new(),
+            },
+        }
+    }
+    fn solve(input: Vec<String>) -> Vec<Vec<String>> {
         let mut map: HashMap<[u8; 26], Vec<String>> = HashMap::new();
-        for s in strs {
+        for s in input {
             let mut key = [0_u8; 26];
 
             for c in s.chars() {
@@ -28,35 +36,24 @@ impl Solution {
         output.sort_by_key(|a| a.len());
         output
     }
+    fn run_tests(self) {
+        let cwd = std::env::current_dir().unwrap();
+        let test_file = PathBuf::from_str(&format!("tests/{}.txt", self.problem)).unwrap();
+        let file_path = cwd.join(test_file);
+        let file_content = std::fs::read_to_string(file_path).expect("file does not exist");
+        let lines: Vec<&str> = file_content.lines().collect();
+
+        for (index, test) in lines.iter().enumerate() {
+            if !test.trim().is_empty() {
+                let test = serde_json::from_str(test).unwrap();
+                println!("Test {}:\n\n=> {:?}", index + 1, test);
+                let ans = Solution::solve(test);
+                let ans_format = format!("=> {ans:?}");
+                println!("{}", ans_format);
+                println!();
+                println!("{}", "-".repeat(ans_format.len() + 2));
+                println!();
+            }
+        }
+    }
 }
-
-// use std::{path::PathBuf, str::FromStr};
-
-// fn main() {
-//     let cwd = std::env::current_dir().unwrap();
-//     let test_file = PathBuf::from_str(&format!("tests/{}.txt", "group_anagrams")).unwrap();
-//     let file_path = cwd.join(test_file);
-//     let file_content = std::fs::read_to_string(file_path).expect("file does not exist");
-//     let lines: Vec<&str> = file_content.lines().collect();
-
-//     for (index, line) in lines.iter().enumerate() {
-//         if !line.trim().is_empty() {
-//             let line: String = line.trim().chars().filter(|&c| c != '"').collect();
-//             let line: Vec<String> = line
-//                 .strip_prefix('[')
-//                 .unwrap()
-//                 .strip_suffix(']')
-//                 .unwrap()
-//                 .split(',')
-//                 .map(|s| s.trim().to_string())
-//                 .collect();
-//             println!("Test {}:\n\ni: {:?}", index, line);
-//             let solution = Solution::solve(line);
-//             let ans_format = format!("o: {solution:?}");
-//             println!("{}", ans_format);
-//             println!();
-//             println!("{}", "-".repeat(ans_format.len() + 2));
-//             println!();
-//         }
-//     }
-// }

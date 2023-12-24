@@ -3,31 +3,27 @@ use std::{path::PathBuf, str::FromStr};
 use super::generic_solution::{GenericSolution, Solve};
 
 pub struct Solution {
+    pub generic: GenericSolution<String, bool>,
     pub problem: String,
-    pub generic: GenericSolution<Vec<i32>, Vec<i32>>,
 }
 
-impl Solve<Vec<i32>, Vec<i32>> for Solution {
+impl Solve<String, bool> for Solution {
     fn new() -> Self {
         Self {
-            problem: "product_except_self".to_string(),
+            problem: "is_palindrome".to_string(),
             generic: GenericSolution {
-                input: Vec::new(),
-                output: Vec::new(),
+                input: String::new(),
+                output: true,
             },
         }
     }
-    fn solve(mut nums: Vec<i32>) -> Vec<i32> {
-        let mut out: Vec<i32> = vec![1; nums.len()];
-        for i in 0..nums.len() {
-            out[i] = nums[i - 1] * out[i - 1];
-        }
-        let mut right = 1;
-        for n in out.iter_mut().rev() {
-            *n *= right;
-            right *= nums.pop().unwrap();
-        }
-        out
+    fn solve(input: String) -> bool {
+        let out: String = input
+            .chars()
+            .filter(|&c| c.is_alphanumeric())
+            .collect::<String>()
+            .to_ascii_lowercase();
+        out == out.chars().rev().collect::<String>()
     }
     fn run_tests(self) {
         let cwd = std::env::current_dir().unwrap();
@@ -38,13 +34,13 @@ impl Solve<Vec<i32>, Vec<i32>> for Solution {
 
         for (index, test) in lines.iter().enumerate() {
             if !test.trim().is_empty() {
-                let test = serde_json::from_str(test).unwrap();
+                let test: String = serde_json::from_str(test).unwrap();
                 println!("Test {}:\n\n=> {:?}", index + 1, test);
-                let ans = Solution::solve(test);
+                let ans = Solution::solve(test.clone());
                 let ans_format = format!("=> {ans:?}");
                 println!("{}", ans_format);
                 println!();
-                println!("{}", "-".repeat(ans_format.len() + 2));
+                println!("{}", "-".repeat(test.len() + 5));
                 println!();
             }
         }
